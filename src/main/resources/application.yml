@@ -1,0 +1,46 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/catalogdb?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: cataloguser
+    password: catalogpass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+  # (opcional pero recomendado)
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  # (opcional)
+  main:
+    allow-bean-definition-overriding: true
+
+app:
+  cors:
+    allowed-origins: "http://localhost:5173,http://localhost:3000"
+  
+  auth:
+    base-url: "http://localhost:8081"
+
+security:
+  jwt:
+    issuer: "auth-service"  # ⬅ Debe coincidir exactamente con el issuer del auth-service
+    public-key-url: "http://localhost:8081/auth/keys/public"  # ⬅ URL para obtener la clave pública del auth-service
+
+    # Si tu JwtKeyProvider lee esta otra key, puedes dejarla duplicada (no estorba):
+    # (borra una de las dos si solo usas una en código)
+# app:
+#   auth:
+#     public-key-url: "http://localhost:8081/auth/keys/public"
+
+logging:
+  level:
+    org.springframework.security: DEBUG
